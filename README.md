@@ -16,7 +16,7 @@ xdmod-setup
 **Параметры настройки:**
 
 **1. General Settings:**
-- Site Address: `https://10.36.80.9:8443/`
+- Site Address: `https://10.00.80.9:8443/`
 - Email Address: `admin@local`
 - Chromium Path: `[Enter]`
 - Center Logo Path: `[Enter]`
@@ -27,9 +27,9 @@ xdmod-setup
 - DB Hostname: `[localhost]`
 - DB Port: `[3306]`
 - DB Username: `[xdmod]`
-- DB Password: `secure_xdmod_password_123`
+- DB Password: `secure_xdmod_password_1234`
 - DB Admin Username: `[root]`
-- DB Admin Password: `secure_root_password_123`
+- DB Admin Password: `secure_root_password_1234`
 - Drop and recreate databases: `yes` (для всех баз)
 
 **4. Resources:**
