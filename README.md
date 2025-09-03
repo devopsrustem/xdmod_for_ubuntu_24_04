@@ -141,4 +141,50 @@ docker exec xdmod-container /usr/local/bin/auto-import.sh
 docker exec xdmod-container xdmod-shredder -r tcluster01 -f slurm
 docker exec xdmod-container xdmod-ingestor
 docker exec xdmod-container xdmod-ingestor --aggregate
+
+
+## Перегенерация SSL сертификата
+
+Если нужно изменить IP адрес или перегенерировать сертификат:
+
+```bash
+# Удалить старый сертификат
+docker exec xdmod-container rm -f /etc/ssl/certs/xdmod-selfsigned.crt /etc/ssl/private/xdmod-selfsigned.key
+
+# Создать конфигурацию с новым IP
+docker exec xdmod-container bash -c 'cat > /tmp/ssl.conf << EOF
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = RU
+ST = Moscow
+L = Moscow
+O = Company
+CN = НОВЫЙ_IP_АДРЕС
+
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = НОВЫЙ_IP_АДРЕС
+DNS.1 = localhost
+EOF'
+
+# Сгенерировать новый сертификат
+docker exec xdmod-container openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/ssl/private/xdmod-selfsigned.key \
+    -out /etc/ssl/certs/xdmod-selfsigned.crt \
+    -config /tmp/ssl.conf -extensions v3_req
+
+# Установить права и перезапустить Apache
+docker exec xdmod-container chmod 600 /etc/ssl/private/xdmod-selfsigned.key
+docker exec xdmod-container service apache2 restart
+```
+
+**Замените `НОВЫЙ_IP_АДРЕС` на ваш IP адрес.**
 ```
