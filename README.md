@@ -3,6 +3,22 @@
 Docker-контейнер с Open XDMoD для мониторинга SLURM кластера.
 
 ## Quick Start
+### Изменение IP перед сборкой контейнера
+
+Чтобы изменить IP адрес до сборки контейнера, отредактируйте файл `scripts/entrypoint.sh`:
+
+```bash
+# Найти строки с IP адресом
+grep -n "10.36.80.9" scripts/entrypoint.sh
+
+# Заменить на новый IP
+sed -i 's/10.36.80.9/ВАШ_НОВЫЙ_IP/g' scripts/entrypoint.sh
+
+# Проверить изменения
+grep -n "ВАШ_НОВЫЙ_IP" scripts/entrypoint.sh
+```
+
+Также обновите в `docker-compose.yml` если нужно.
 
 ```bash
 # Сборка и запуск контейнера
